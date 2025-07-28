@@ -627,16 +627,16 @@ app.get('/api/v1/getAllAnxietyLevels', async (req, res) => {
 
 let testAccount = nodemailer.createTestAccount();
 //Tranport to send email reset or special code 
-const transporter = nodemailer.createTransport({ //Hey transporter like the Movie HAHA
-   service: 'gmail',
-   host: 'smtp.gmail.com',
-   port: 587,
-   secure: false,
-   auth:{
-   user: 'mccauleyashu18@gmail.com',
-   pass: 'nomfgoffbumcwasd' 
-   }
-});
+//const transporter = nodemailer.createTransport({ //Hey transporter like the Movie HAHA
+//   service: 'gmail',
+//   host: 'smtp.gmail.com',
+ //  port: 587,
+ //  secure: false,
+ //  auth:{
+//   user: 'mccauleyashu18@gmail.com',
+//   pass: 'nomfgoffbumcwasd' 
+//}
+//}); 
 
 //Create me that random 4 number code
 function generateCode(){
