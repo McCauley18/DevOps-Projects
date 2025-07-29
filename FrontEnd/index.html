@@ -80,7 +80,7 @@
                         <div class="header__top__inner">
 
                            <div class="header__top__left"> 
-                                <p>Display date and time</p>
+                                <h4 id="mytime"></h4> <h4 id="mydate"></h4>
                             </div>
                             
                             <div class="header__logo">
@@ -99,8 +99,8 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                              
-                                    <li><a href="./login.html">Login</a></li>
-                                    <li><a href="./register.html">Sign Up</a></li>
+                                    <li><a href="./login.html"></a></li>
+                                    <li><a href="./register.html"></a></li>
                                  
                             
                         </ul>
@@ -141,29 +141,6 @@
         </div>
     </section>
     <!-- Hero Section End -->
- 
- 
-    <!-- Map Begin --> 
-    <div class="map">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-7">
-                    <div class="map__inner">
-                        <h6>COlorado</h6>
-                        <ul>
-                            <li>1000 Lakepoint Dr, Frisco, CO 80443, USA</li>
-                            <li>Sweetcake@support.com</li>
-                            <li>+1 800-786-1000</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="map__iframe">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10784.188505644011!2d19.053119335158936!3d47.48899529453826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1543907528304" height="300" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-        </div>
-    </div>
-    <!-- Map End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer set-bg" data-setbg="img/footer-bg.jpg">
@@ -251,6 +228,30 @@
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/jquery.nicescroll.min.js"></script>
 <script src="js/main.js"></script>
+
+<script>
+    function myTimeDate(){
+    const now = new Date();
+    //set thay time
+    const hours = now.getHours().toString().padStart(2,'0');
+    const minutes = now.getMinutes().toString().padStart(2,'0');
+    document.getElementById('mytime').textContent = `${hours}:${minutes}`;
+
+    //set the date
+    const day = now.getDate();
+    const month = now.toLocaleString('default' , {month:'long'});
+    const year = now.getFullYear();
+
+    document.getElementById('mydate').textContent = `${day} ${month} ${year}`;
+}
+
+myTimeDate();
+setInterval(myTimeDate, 60000);
+
+</script>
+
+
+
 </body>
 
 </html>

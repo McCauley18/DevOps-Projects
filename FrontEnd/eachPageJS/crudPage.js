@@ -1,3 +1,7 @@
+const API_BASE_URL = 'http://127.0.0.1:3001';
+const myRow = document.getElementById('cakeRow');
+
+
 const popup = document.querySelector(".popup");
 const overlay = document.querySelector(".blurry");
 
@@ -49,20 +53,68 @@ document.getElementById('cakeform').addEventListener("submit", async function na
     formData.append('cakeflavour', htmlflavour);
     formData.append('cakeimage', imageFile);
 
-    const response = await fetch('http://127.0.0.1:3001/api/addcake', {
-            method: 'POST',
-            body: formData, 
+    const response = await fetch(`${API_BASE_URL}/api/addcake`, {
+            method: 'POST', 
+            body: formData,   
         });
 
     if (!response.ok) {
     const text = await response.text();  // debug raw error
     console.error("Server Error:", text);
     alert("Server error occurred.");
-    return;
+    return; 
     }
 
     const result = await response.json();
     console.log("Output: ", result);
     alert(result.message);
 
+}); 
+
+
+//   just for the name, category and price
+document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/cakedetails`);
+        const data = await response.json();
+
+        if (data.message && Array.isArray(data.message)) {
+            updateCakeCards(data.message);
+        } else {
+            console.error("Unexpected data format:", data);
+        }
+    } catch (err) {
+        console.error("Error fetching cake data:", err);
+    }
 });
+  
+function updateCakeCards(cakeList) {
+    const cakeRow = document.getElementById("cakeRow");
+    const template = document.getElementById("cakeTemplate");
+
+    // Clear all other cards (but keep the hidden template)
+    cakeRow.querySelectorAll(".col-lg-3:not(#cakeTemplate)").forEach(e => e.remove());
+
+    cakeList.forEach(cake => {
+        // Clone the template node
+        const clone = template.cloneNode(true);
+        clone.classList.remove("d-none"); // Make it visible
+        clone.removeAttribute("id"); // Remove duplicate ID
+
+        // Fill in cake details
+        clone.querySelector("#category").textContent = cake.cakecategory;
+        clone.querySelector("#name a").textContent = cake.cakename;
+        clone.querySelector("#price").textContent = cake.cakeprice;
+
+        if (cake.cakeimage) { 
+            const imageData = `data:image/jpeg;base64,${cake.cakeimage}`;
+            clone.querySelector(".product__item__pic").style.backgroundImage = `url('${imageData}')`;
+        }
+
+        // (Optional) Update background image if you have it in your DB
+        // clone.querySelector(".product__item__pic").style.backgroundImage = `url('img/shop/${cake.image}')`;
+
+        // Append to the row
+        cakeRow.appendChild(clone);
+    });
+}

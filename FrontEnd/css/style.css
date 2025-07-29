@@ -4032,7 +4032,7 @@ ol {
     position: absolute; 
     display: none;
     top: -150%;  
-    right: 45%;
+    right: -110%;
     opacity: 0;
     transform: translate(-50%, -50%) scale(1.25);
     width: 380px;
@@ -4048,7 +4048,7 @@ ol {
 
 .popup.active{
     display: block;
-    top: 180%; 
+    top: 200%; 
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
     transition: top 0ms ease-in-out 0ms,

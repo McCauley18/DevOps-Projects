@@ -294,3 +294,113 @@ app.get('/api/cakes', (req, res) => {
 });
 
 
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('/api/cakeDetails')
+        .then(res => res.json())
+        .then(data => {
+            if (data.message && Array.isArray(data.message)) {
+                renderCakes(data.message);
+            } else {
+                console.error("Unexpected data format:", data);
+            }
+        })
+        .catch(err => {
+            console.error("Error fetching cake data:", err);
+        });
+});
+
+function renderCakes(cakeList) {
+    const container = document.querySelector(".row");
+    container.innerHTML = ""; // Clear existing items if needed
+
+    for (let i = 0; i < cakeList.length; i++) {
+        const cake = cakeList[i];
+        const cakeHTML = createCakeHTML(cake);
+
+        // Create a new row for every 4 items
+        if (i % 4 === 0) {
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "row cake-row";
+            container.appendChild(rowDiv);
+        }
+
+        // Append item to the current row
+        const currentRow = container.querySelectorAll(".cake-row")[Math.floor(i / 4)];
+        currentRow.insertAdjacentHTML('beforeend', cakeHTML);
+    }
+}
+
+function createCakeHTML(cake) {
+    return `
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="product__item">
+                <div class="product__item__pic set-bg" style="background-image: url('img/shop/default.jpg');">
+                    <div class="product__label">
+                        <span>${cake.cakecategory}</span>
+                    </div>
+                </div>
+                <div class="product__item__text">
+                    <h6><a href="./shop-details.html">${cake.cakename}</a></h6>
+                    <div class="product__item__price">$${cake.cakeprice}</div>
+                    <button type="submit" class="site-btn"><a href="edit-Cakes.html">Edit</a></button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+</script>
+there are more than 3 classes with the class name as row, how can i make the one I want more unique from the others without altering the css
+
+function updateCakeCards(cakeList) {
+    const cakeRow = document.getElementById("cakeRow");
+    const template = document.getElementById("cakeTemplate");
+
+    // Remove previous cards
+    cakeRow.querySelectorAll(".col-lg-3:not(#cakeTemplate)").forEach(e => e.remove());
+
+    cakeList.forEach(cake => {
+        const clone = template.cloneNode(true);
+        clone.classList.remove("d-none");
+        clone.removeAttribute("id");
+
+        // Fill in text content
+        clone.querySelector("#category").textContent = cake.cakecategory;
+        clone.querySelector("#name a").textContent = cake.cakename;
+        clone.querySelector("#price").textContent = `$${cake.cakeprice}`;
+
+        // Set image if available
+        if (cake.cakeimage) {
+            const imageData = `data:image/jpeg;base64,${cake.cakeimage}`;
+            clone.querySelector(".product__item__pic").style.backgroundImage = `url('${imageData}')`;
+        }
+
+        cakeRow.appendChild(clone);
+    });
+}
+
+app.get('/api/cakedetails' , (req, res)=>{ 
+    const query = 'Select cakename, cakecategory, cakeprice, cakeimage from caketable';
+    const errmsg = 'Failed to return name, category and price of the cake';
+    client.query(query, (err, result) => {  
+        if (!err) {
+            const cakes = result.rows.map(cake => {
+                return {
+                    cakename: cake.cakename,
+                    cakecategory: cake.cakecategory,
+                    cakeprice: cake.cakeprice,
+                    // Convert binary image to base64 string (for frontend rendering) 
+                    cakeimage: cake.cakeimage ? Buffer.from(cake.cakeimage).toString('base64') : null
+                };
+            });
+
+            return res.status(200).json({ message: cakes });
+        } else {
+            console.log(errmsg, err);
+            return res.status(500).json({ mess: errmsg });
+        }
+    });
+});

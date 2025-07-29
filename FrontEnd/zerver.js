@@ -23,12 +23,12 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({ 
     origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Allow your Live Server
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // crud methods
     allowedHeaders: ['Content-Type']
 }));
  
 
-app.use(express.json()); 
+app.use(express.json());  
 
 app.use('/eachPageJS', express.static(path.join(__dirname, 'eachPageJS')));
 
@@ -73,11 +73,11 @@ app.post('/api/addcake', upload.single('cakeimage') , async (req, res) => {
         }else{
             //okay so cake is added
             res.status(201).json({message: 'Cake Added'});
-        }
+        } 
     });
    
 });   
-
+  
 app.get('/api/getCakes', (err, res) =>{
     const query = 'select * from caketable';
     client.query(query, (err, result)=>{
@@ -89,7 +89,53 @@ app.get('/api/getCakes', (err, res) =>{
             return res.status(200).json(result.rows); 
         }
     })
-     
+      
+}); 
+
+app.get('/api/cakedetails' , (req, res)=>{ 
+    const query = 'Select cakename, cakecategory, cakeprice, cakeimage from caketable';
+    const errmsg = 'Failed to return name, category and price of the cake';
+    client.query(query, (err, result) => {  
+        if (!err) {
+            const cakes = result.rows.map(cake => {
+                return {
+                    cakename: cake.cakename,
+                    cakecategory: cake.cakecategory,
+                    cakeprice: cake.cakeprice,
+                    // Convert binary image to base64 string (for frontend rendering) 
+                    cakeimage: cake.cakeimage ? Buffer.from(cake.cakeimage).toString('base64') : null
+                };
+            });
+
+            return res.status(200).json({ message: cakes });
+        } else {
+            console.log(errmsg, err);
+            return res.status(500).json({ mess: errmsg });
+        }
+    });
+});
+
+
+app.get('/api/allinfo', (req, res)=>{
+    const query = 'select cakename, cakecategory, cakeprice, cakedescription, cakeflavour, cakeimage from caketable';
+    client.query(query, (err, result) =>{
+        if(!err){
+        const cakes = result.rows.map( c =>{
+            return {
+                cakename: c.cakename,
+                cakecategory: c.cakecategory,
+                cakeprice: c.cakeprice,
+                cakedescription: c.cakedescription,
+                cakeflavour: c.cakeflavour,
+                cakeimage: c.cakeimage ? Buffer.from(c.cakeimage).toString('base64') : null
+            };
+        });
+        return res.status(200).json({message: cakes});
+    }else{ 
+        console.log('Failed to get all info: ', err);
+        return res.status(500).json({mess: 'Failed to retrieve all the cakies information from the database'})
+    }
+    });
 });
 
 
