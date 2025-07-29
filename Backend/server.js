@@ -14,7 +14,7 @@ const { REFUSED } = require('dns');
 const { error, Console } = require('console'); 
 const jwt = require('jsonwebtoken');  
 const { cli } = require('webpack');
-const secretKey = 'key';
+const secretKey = 'key'; 
 const pdfDocument = require('pdfkit'); 
 const cron = require('node-cron');
  
@@ -153,7 +153,7 @@ app.post('/api/v1/patient_table/addStudent', async (req, res) => {
     }
 });
    
-//********************************************8 */
+//********************************************8 */ 
 app.post('/api/v1/patient_table/login', async (req, res) => {
     const { email} = req.body;
     let password = req.body.password;
@@ -572,7 +572,7 @@ const getPatientsData = async () => {
         FROM patient_table
         WHERE patient_email LIKE '%@gmail.com'
         GROUP BY login_date
-        ORDER BY login_date
+        ORDER BY login_date 
       `);
       return res.rows;
     } catch (err) {
