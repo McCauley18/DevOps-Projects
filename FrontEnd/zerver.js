@@ -131,11 +131,24 @@ app.get('/api/allinfo', (req, res)=>{
             };
         });
         return res.status(200).json({message: cakes});
-    }else{ 
+    }else{    
         console.log('Failed to get all info: ', err);
         return res.status(500).json({mess: 'Failed to retrieve all the cakies information from the database'})
     }
     });
+});
+
+app.delete('/api/delete/:cakename', async (req, res) =>{
+    const query = 'delete from caketable where cakename = $1';
+    const cname = req.params.cakename;
+    
+    const ressy = await client.query(query, [cname]); 
+    if(ressy.rowCount == 0){
+        console.log("So row was not found");
+    }else{
+        return res.status(200).json({message: 'Cake: ' + cname + ' deleted'})
+    }
+
 });
 
 

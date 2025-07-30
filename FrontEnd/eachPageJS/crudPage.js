@@ -1,6 +1,7 @@
 const API_BASE_URL = 'http://127.0.0.1:3001';
 const myRow = document.getElementById('cakeRow');
 
+ 
 
 const popup = document.querySelector(".popup");
 const overlay = document.querySelector(".blurry");
@@ -89,32 +90,42 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
   
 function updateCakeCards(cakeList) {
+    //clone.querySelector("#name a").href = `shop-details.html?name=${encodeURIComponent(cake.cakename)}`;
+
     const cakeRow = document.getElementById("cakeRow");
     const template = document.getElementById("cakeTemplate");
 
     // Clear all other cards (but keep the hidden template)
     cakeRow.querySelectorAll(".col-lg-3:not(#cakeTemplate)").forEach(e => e.remove());
 
-    cakeList.forEach(cake => {
+    cakeList.forEach(cake => { 
         // Clone the template node
         const clone = template.cloneNode(true);
         clone.classList.remove("d-none"); // Make it visible
         clone.removeAttribute("id"); // Remove duplicate ID
 
-        // Fill in cake details
+        // Fill in cake details    
         clone.querySelector("#category").textContent = cake.cakecategory;
         clone.querySelector("#name a").textContent = cake.cakename;
+        clone.querySelector("#name a").href =  `edit-Cakes.html?name=${encodeURIComponent(cake.cakename)}`;
+        console.log("Cake names: " + cake.cakename);
         clone.querySelector("#price").textContent = cake.cakeprice;
+
+        const editLink = clone.querySelector(".edit-btn"); 
+        editLink.addEventListener('click', () => {
+  window.location.href = `edit-Cakes.html?name=${encodeURIComponent(cake.cakename)}`;
+});
+
+
+//editLink.href = `edit-Cakes.html?name=${encodeURIComponent(cake.cakename)}`;
+
 
         if (cake.cakeimage) { 
             const imageData = `data:image/jpeg;base64,${cake.cakeimage}`;
             clone.querySelector(".product__item__pic").style.backgroundImage = `url('${imageData}')`;
         }
-
-        // (Optional) Update background image if you have it in your DB
-        // clone.querySelector(".product__item__pic").style.backgroundImage = `url('img/shop/${cake.image}')`;
-
         // Append to the row
         cakeRow.appendChild(clone);
     });
 }
+ 

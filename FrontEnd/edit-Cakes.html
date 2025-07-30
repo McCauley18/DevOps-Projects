@@ -44,7 +44,7 @@
                     <div class="col-lg-12">
                          <div class="header__top__inner">
                             <div class="header__top__left">
-                                <p>Display time and date</p>
+                                <h4 id="mytime"></h4> <h4 id="mydate"></h4>
                             </div>
 
                             <div class="header__logo">
@@ -77,37 +77,36 @@
     <!-- Shop Details Section Begin -->
     <section class="product-details spad">
         <div class="container">
-            <div class="row">
+            <div class="row" id="cakeInfo">
                 <div class="col-lg-6">
-                    <div class="product__details__img">
-                        <div class="product__details__big__img">
+                    <div class="product__details__img"> 
+                        <div class="product__details__big__img"> 
                             <img class="big_img" src="img/shop/details/product-big-1.jpg" alt="">
                         </div>
                          
-                    </div>
+                    </div> 
                 </div>
                 <div class="col-lg-6">
                     <div class="product__details__text">
-                        <div class="product__label">Cupcake</div>
-                        <h4>SWEET AUTUMN LEAVES</h4>
-                        <h5>$26.41</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod tempor incididunt ut labore
+                        <div class="product__label" id="category">Cupcake</div>
+                        <h4 id="name">SWEET AUTUMN LEAVES</h4>
+                        <h5 id="price">26.41</h5>
+                        <p id="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod tempor incididunt ut labore
                         et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida</p>
                         <ul>
-                            <li>Favour: <span>Vanilla</span></li>
-                            <!-- <li>Category: <span>Biscuit cake</span></li> -->
-                            <!-- <li>Tags: <span>Gadgets, minimalisstic</span></li> -->
+                            <li id="flavour">Favour: <span>Vanilla</span></li>
+                              
                         </ul>
                         <div class="product__details__option"> 
                              
-                            <a href="shopCustomer.html" class="primary-btn">Return to Menu</a>
+                            <button type="submit" class="site-btn"><a href="crudPage.html">Back</a></button>
  
-                            <a href="shopCustomer.html" class="primary-btn">Edit Info.</a> 
+                            <button type="submit" class="site-btn"><a href="edit-Cakes.html">Save</a></button>
  
-                            <a href="shopCustomer.html" class="primary-btn">Delete</a>
-                             
+                            <button type="submit" class="site-btn" id="deleteme">Delete</button>
+                               
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div> 
              
@@ -201,6 +200,9 @@
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/jquery.nicescroll.min.js"></script>
 <script src="js/main.js"></script>
+
+<script src="eachPageJS/edit-Cake.js"></script>
+
 </body>
 
 </html>
