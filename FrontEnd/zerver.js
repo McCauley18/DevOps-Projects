@@ -130,13 +130,14 @@ app.get('/api/allinfo', (req, res)=>{
                 cakeimage: c.cakeimage ? Buffer.from(c.cakeimage).toString('base64') : null
             };
         });
+        console.log("Cake Informacion: " + cakes) 
         return res.status(200).json({message: cakes});
     }else{    
         console.log('Failed to get all info: ', err);
         return res.status(500).json({mess: 'Failed to retrieve all the cakies information from the database'})
     }
     });
-});
+});  
 
 app.delete('/api/delete/:cakename', async (req, res) =>{
     const query = 'delete from caketable where cakename = $1';
@@ -150,17 +151,51 @@ app.delete('/api/delete/:cakename', async (req, res) =>{
     }
 
 });
+ 
+app.get('/api/getinfobeforeEdit/:cakenametodelete', (req, res)=>{
+    const getname = req.params.cakenametodelete; 
+    console.log("Pass 1")
+     
+    const query = 'select cakeprice, cakedescription from caketable where cakename = $1';
+    
+    console.log("Pass 2") 
+    client.query(query, [getname], (err, result) =>{
+        // if(!err && result.rows.length > 0){   
+        
+        if(result.rows.length === 0){
+            return res.status(400).json({error: 'Cake not found'});
+        }
 
+        const c = result.rows[0];   
 
-// app.put('/api/update', async(req, res) =>{
-//     if(!err){
-//         console.log('Pass')
-//     }else{
-//         console.log('Failed this test');
-//     }
-// });
+        return res.status(200).json ({
+            
+            cakeprice: c.cakeprice,
+            cakedescription: c.cakedescription,
+
+        });
+    
+    });
+});
+
+app.put('/api/updatepricedescription/:cakenametodelete', (req, res) =>{
+    const getpriceDescriptionname = req.params.cakenametodelete;
+    const {cakeprice, cakedescription} = req.body;
+
+    console.log("getpriceDescriptionname" , getpriceDescriptionname);
+    console.log("cakeprice:" +  cakeprice);
+    console.log("cakedescription: " + cakedescription) 
+    console.log("Body: " + req.body);
+
+    const query = 'update caketable set cakeprice = $1, cakedescription= $2 where cakename = $3';
+    client.query(query, [cakeprice, cakedescription, getpriceDescriptionname], (err, result)=>{
+        console.log("Query was submitted");
+        
+        res.status(200).json({message: 'Cake info updated'});
+    });
+ });
 
 //PORT INFO BELOW
-app.listen(PORT, () => {
+app.listen(PORT, () => { 
     console.log(`Server running on port ${PORT}`);
 });    

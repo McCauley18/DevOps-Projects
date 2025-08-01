@@ -52,7 +52,7 @@
                                 <a href="./index.html"><img src="img/logo.png" alt=""></a> 
                             </div>
                             <div class="header__top__right">
-                                <p>Welcome User</p>  
+                                <p>Welcome McCauley</p>  
                             </div>
                         </div>
                     </div>
@@ -69,6 +69,10 @@
                 </div>
             </div>
         </div>
+
+
+       
+
     </header>
     <!-- Header Section End -->
 
@@ -76,10 +80,37 @@
 
     <!-- Shop Details Section Begin -->
     <section class="product-details spad">
+
+         <!-- POPUP INSIDE STARTS HERE --> 
+                        <div class="popup" style="top: 10cm; left: 20cm;"> 
+                            <div class="close-btn">&times;</div> 
+                        
+                            <form class="form" id="cakeform" enctype="multipart/form-data"> 
+                                <h2>Cake details</h2> 
+                                
+                                <div class="form-element">
+                                    <label for="price">Price</label> 
+                                    <input type="text" id="cakyprice" placeholder="Enter prince">
+                                </div>
+                                <div class="form-element">
+                                    <label for="description">Description</label>
+                                    <input type="text" id="cakydescription" placeholder="Enter description">
+                                </div>
+                                
+                                <div class="form-element">
+                                <button type="submit">Done</button> 
+                                </div>
+
+                            </form>
+        
+                        </div>
+                        <!-- POPUP INSIDE ENDS HERE -->
+
+
         <div class="container">
             <div class="row" id="cakeInfo">
                 <div class="col-lg-6">
-                    <div class="product__details__img"> 
+                    <div class="product__details__img">  
                         <div class="product__details__big__img"> 
                             <img class="big_img" src="img/shop/details/product-big-1.jpg" alt="">
                         </div>
@@ -88,22 +119,22 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product__details__text">
-                        <div class="product__label" id="category">Cupcake</div>
-                        <h4 id="name">SWEET AUTUMN LEAVES</h4>
-                        <h5 id="price">26.41</h5>
-                        <p id="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod tempor incididunt ut labore
+                        <div class="product__label" id="ccategory">Cupcake</div>
+                        <h4 id="cname">SWEET AUTUMN LEAVES</h4>
+                        <h5 id="cprice">26.41</h5>
+                        <p id="cdescription">Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod tempor incididunt ut labore
                         et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida</p>
                         <ul>
-                            <li id="flavour">Favour: <span>Vanilla</span></li>
+                            <li id="cflavour">Favour: <span></span></li>
                               
                         </ul>
                         <div class="product__details__option"> 
                              
-                            <button type="submit" class="site-btn"><a href="crudPage.html">Back</a></button>
+                            <button type="submit" class="site-btn" id="backBtn">Back</button>
  
-                            <button type="submit" class="site-btn"><a href="edit-Cakes.html">Save</a></button>
- 
-                            <button type="submit" class="site-btn" id="deleteme">Delete</button>
+                            <button type="submit" class="site-btn" id="editpopup" style="top: -40%; left: -40;">Edit</button>
+
+                            <button type="submit" class="site-btn" id="deleteme">Delete</button> 
                                
                         </div>
                     </div> 

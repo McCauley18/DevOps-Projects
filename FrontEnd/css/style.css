@@ -540,6 +540,7 @@ ol {
   background: #ffffff;
   padding: 65px 70px 70px;
   position: relative;
+  z-index: 1001;
 }
 .hero__text:after {
   position: absolute;
