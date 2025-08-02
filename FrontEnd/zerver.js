@@ -57,7 +57,7 @@ function encryptPassword(password){
 //Route to handle student registration
 app.post('/api/addcake', upload.single('cakeimage') , async (req, res) => {
 
-    console.log('Console Log: ', req.body); 
+    console.log('Console Log: ', req.body);   
     
     const { cakename, cakecategory, cakeprice, cakedescription, cakeflavour} = req.body;
     const cakeimage = req.file.buffer; 
@@ -73,6 +73,7 @@ app.post('/api/addcake', upload.single('cakeimage') , async (req, res) => {
         }else{
             //okay so cake is added
             res.status(201).json({message: 'Cake Added'});
+            console.log("Cake has been added");
         } 
     });
    
@@ -130,7 +131,7 @@ app.get('/api/allinfo', (req, res)=>{
                 cakeimage: c.cakeimage ? Buffer.from(c.cakeimage).toString('base64') : null
             };
         });
-        console.log("Cake Informacion: " + cakes) 
+        // console.log("Cake Informacion: " + cakes) 
         return res.status(200).json({message: cakes});
     }else{    
         console.log('Failed to get all info: ', err);

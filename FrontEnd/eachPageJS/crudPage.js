@@ -68,7 +68,9 @@ document.getElementById('cakeform').addEventListener("submit", async function na
 
     const result = await response.json();
     console.log("Output: ", result);
-    alert(result.message);
+    console.log("Message from backend: " + result.message);
+    window.location.href = 'crudPage.html';
+    popup.classList.remove("active");
 
 }); 
 

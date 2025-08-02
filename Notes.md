@@ -404,3 +404,59 @@ app.get('/api/cakedetails' , (req, res)=>{
         }
     });
 });
+
+
+# WATCH OUT WATCH OUT WATCH OUT WATCH OUT
+
+PS C:\Users\ASHU\Videos\Captures\DevOps Cake Sale\FrontEnd> cd "devops cake sale"
+PS C:\Users\ASHU\Videos\Captures\DevOps Cake Sale\FrontEnd> cd "devops cake sale"
+cd : Cannot find path 'C:\Users\ASHU\Videos\Captures\DevOps Cake Sale\FrontEnd\devops cake sale' because it does not exist.
+At line:1 char:1
++ cd "devops cake sale"
++ ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\ASHU\V...evops cake sale:String) [Set-Location], ItemNotFoundException      
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SetLocationCommand
+
+PS C:\Users\ASHU\Videos\Captures\DevOps Cake Sale\FrontEnd> cd ..
+PS C:\Users\ASHU\Videos\Captures\DevOps Cake Sale> docker --version
+Docker version 28.3.2, build 578ccf6
+PS C:\Users\ASHU\Videos\Captures\DevOps Cake Sale> docker init     
+
+Welcome to the Docker Init CLI!
+
+This utility will walk you through creating the following files with sensible defaults for your project:
+  - .dockerignore
+  - Dockerfile
+  - compose.yaml
+  - README.Docker.md
+
+Let's get started!
+
+? What application platform does your project use? Node
+? What version of Node do you want to use? (22.17.1) 22.17.1
+
+? What application platform does your project use? Node
+? What version of Node do you want to use? (22.17.1) 22.17.1
+
+? What version of Node do you want to use? 22.17.1
+? Which package manager do you want to use? npm
+? What command do you want to use to start the app? [tab for suggestions] (node index.js) node index.js
+
+? What command do you want to use to start the app? node index.js
+? What port does your server listen on? 3001
+
+? What port does your server listen on? 3001
+
+✔ Created → .dockerignore
+✔ Created → Dockerfile
+✔ Created → compose.yaml
+✔ Created → README.Docker.md
+
+→ Your Docker files are ready!
+  Review your Docker files and tailor them to your application.
+  Consult README.Docker.md for information about using the generated files.
+
+What's next?
+  Start your application by running → docker compose up --build
+  Your application will be available at http://localhost:3001
+PS C:\Users\ASHU\Videos\Captures\DevOps Cake Sale> 
