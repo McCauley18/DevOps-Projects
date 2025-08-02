@@ -1,4 +1,4 @@
-const {Client} = require('pg')
+const { Pool } = require("pg");
 const express = require('express');
 const app = express();
 const multer = require("multer");
@@ -6,29 +6,54 @@ const storage = multer.memoryStorage(); // Store in memory as Buffer
 const upload = multer({ storage: storage });
 const path = require('path');
 const cors = require('cors');
+const retry = require('async-retry')
 
+const pool = new Pool({
+//   host: "localhost",
+  host: "db",
+  user: "postgres", 
+  port: 5432,
+  password: "1234",
+  database: "finalops"
+});
 
-const client = new Client({ 
-    host:"localhost",
-    user:"postgres",  
-    port:5432,
-    password:"1234", 
-    database:"DevOps"   
-});  
+async function connectWithRetry() {
+  await retry(async () => {
+    const client = await pool.connect();
+    client.release(); 
+    console.log("✅ Connected to PostgreSQL via pool");
+  }, {
+    retries: 5,
+    minTimeout: 1000,
+    onRetry: (err, attempt) => {
+      console.warn(`Retry ${attempt}: DB not ready yet (${err.message})`);
+    }
+  });
+}
 
-client.connect();
-
+connectWithRetry().catch((err) => {
+  console.error("❌ Failed to connect after retries:", err);
+  process.exit(1);
+});
 
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({ 
-    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Allow your Live Server
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // crud methods
-    allowedHeaders: ['Content-Type']
-}));
+// app.use(cors({
+//   origin: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type']
+// }));
+
+app.use(cors({ origin: "*" }));
+
+
  
 
 app.use(express.json());  
+
+
+// Serve everything inside the frontend folder
+app.use(express.static(path.join(__dirname)));
 
 app.use('/eachPageJS', express.static(path.join(__dirname, 'eachPageJS')));
 
@@ -63,7 +88,7 @@ app.post('/api/addcake', upload.single('cakeimage') , async (req, res) => {
     const cakeimage = req.file.buffer; 
     // okay so query to insert
     const query = 'INSERT INTO caketable (cakename, cakecategory, cakeprice, cakedescription, cakeflavour, cakeimage) values ($1, $2, $3, $4, $5, $6)';
-    client.query(query, [cakename, cakecategory, cakeprice, cakedescription, cakeflavour, cakeimage] , (err, result) =>{
+    pool.query(query, [cakename, cakecategory, cakeprice, cakedescription, cakeflavour, cakeimage] , (err, result) =>{
         if(err){ 
             console.error('Failed to insert new cake' , err);
             //just for back up 
@@ -79,24 +104,21 @@ app.post('/api/addcake', upload.single('cakeimage') , async (req, res) => {
    
 });   
   
-app.get('/api/getCakes', (err, res) =>{
-    const query = 'select * from caketable';
-    client.query(query, (err, result)=>{
-        if(err){
-            console.log('Error getting ckae', err);
-            return res.status(500).json({error: 'Failed to get cakes rows'});
-        }else{
-            console.log('Cake rows: ', result.rows);
-            return res.status(200).json(result.rows); 
-        }
-    })
+app.get('/api/getCakes', async (req, res) =>{
+    try { 
+        const result = await pool.query('SELECT * FROM public.caketable'); // Example
+        res.json(result.rows);  // or adjust as needed
+    } catch (err) {
+        console.error("API ERROR:", err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
       
 }); 
 
 app.get('/api/cakedetails' , (req, res)=>{ 
-    const query = 'Select cakename, cakecategory, cakeprice, cakeimage from caketable';
+    const query = 'Select cakename, cakecategory, cakeprice, cakeimage from public.caketable';
     const errmsg = 'Failed to return name, category and price of the cake';
-    client.query(query, (err, result) => {  
+    pool.query(query, (err, result) => {  
         if (!err) {
             const cakes = result.rows.map(cake => {
                 return {
@@ -118,8 +140,8 @@ app.get('/api/cakedetails' , (req, res)=>{
 
 
 app.get('/api/allinfo', (req, res)=>{
-    const query = 'select cakename, cakecategory, cakeprice, cakedescription, cakeflavour, cakeimage from caketable';
-    client.query(query, (err, result) =>{
+    const query = 'select cakename, cakecategory, cakeprice, cakedescription, cakeflavour, cakeimage from public.caketable';
+    pool.query(query, (err, result) =>{
         if(!err){
         const cakes = result.rows.map( c =>{
             return {
@@ -144,7 +166,7 @@ app.delete('/api/delete/:cakename', async (req, res) =>{
     const query = 'delete from caketable where cakename = $1';
     const cname = req.params.cakename;
     
-    const ressy = await client.query(query, [cname]); 
+    const ressy = await pool.query(query, [cname]); 
     if(ressy.rowCount == 0){
         console.log("So row was not found");
     }else{
@@ -160,7 +182,7 @@ app.get('/api/getinfobeforeEdit/:cakenametodelete', (req, res)=>{
     const query = 'select cakeprice, cakedescription from caketable where cakename = $1';
     
     console.log("Pass 2") 
-    client.query(query, [getname], (err, result) =>{
+    pool.query(query, [getname], (err, result) =>{
         // if(!err && result.rows.length > 0){   
         
         if(result.rows.length === 0){
@@ -189,7 +211,7 @@ app.put('/api/updatepricedescription/:cakenametodelete', (req, res) =>{
     console.log("Body: " + req.body);
 
     const query = 'update caketable set cakeprice = $1, cakedescription= $2 where cakename = $3';
-    client.query(query, [cakeprice, cakedescription, getpriceDescriptionname], (err, result)=>{
+    pool.query(query, [cakeprice, cakedescription, getpriceDescriptionname], (err, result)=>{
         console.log("Query was submitted");
         
         res.status(200).json({message: 'Cake info updated'});

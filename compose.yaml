@@ -8,13 +8,52 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  server:
+  # the html and css website application
+  server:   
     build:
       context: .
-    environment:
-      NODE_ENV: production
+    # environment:
+    #   NODE_ENV: production
     ports:
       - 3001:3001
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      DB_NAME: finalops
+
+  db:
+    image: postgres 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: finalops
+    container_name: testcontainer 
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # pgAdmin service
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mccauleyashu18@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: TaboT1234#
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  pgadmin_data: 
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
