@@ -111,7 +111,8 @@ function updateCakeCards(cakeList) {
         clone.querySelector("#name a").textContent = cake.cakename;
         clone.querySelector("#name a").href =  `edit-Cakes.html?name=${encodeURIComponent(cake.cakename)}`;
         console.log("Cake names: " + cake.cakename);
-        clone.querySelector("#price").textContent = cake.cakeprice;
+        clone.querySelector("#price").textContent = 'R' + Number(cake.cakeprice).toFixed(2);
+        // document.getElementById("cakyprice").textContent = 'R' + Number(data.cakeprice).toFixed(2);
 
         const editLink = clone.querySelector(".edit-btn"); 
         editLink.addEventListener('click', () => {

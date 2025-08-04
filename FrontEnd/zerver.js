@@ -2,7 +2,7 @@ const { Pool } = require("pg");
 const express = require('express');
 const app = express();
 const multer = require("multer");
-const storage = multer.memoryStorage(); // Store in memory as Buffer
+const storage = multer.memoryStorage();  
 const upload = multer({ storage: storage });
 const path = require('path');
 const cors = require('cors');
@@ -12,7 +12,7 @@ const pool = new Pool({
 //   host: "localhost",
   host: "db",
   user: "postgres", 
-  port: 5432,
+  port: 5432, 
   password: "1234",
   database: "finalops"
 });
@@ -21,7 +21,7 @@ async function connectWithRetry() {
   await retry(async () => {
     const client = await pool.connect();
     client.release(); 
-    console.log("✅ Connected to PostgreSQL via pool");
+    console.log("Connected to PostgreSQL via pool");
   }, {
     retries: 5,
     minTimeout: 1000,
@@ -32,8 +32,8 @@ async function connectWithRetry() {
 }
 
 connectWithRetry().catch((err) => {
-  console.error("❌ Failed to connect after retries:", err);
-  process.exit(1);
+  console.error("Failed to connect after retries:", err);
+  
 });
 
 const PORT = process.env.PORT || 3001;

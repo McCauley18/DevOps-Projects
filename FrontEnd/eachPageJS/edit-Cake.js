@@ -78,7 +78,8 @@ function updateDetails(cake) {
 
     document.getElementById("ccategory").textContent = cake.cakecategory;
     document.getElementById("cname").textContent = cake.cakename;
-    document.getElementById("cprice").textContent = cake.cakeprice;
+    // document.getElementById("cprice").textContent = cake.cakeprice;
+    document.getElementById("cprice").textContent = 'R' + Number(cake.cakeprice).toFixed(2);
     document.getElementById("cdescription").textContent = cake.cakedescription;
     document.getElementById("cflavour").innerHTML = `Flavour: <span>${cake.cakeflavour}</span>`;
      
@@ -179,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
             if(data.cakeprice && data.cakedescription){
                 document.getElementById("cakyprice").value = data.cakeprice
+                
                 document.getElementById("cakydescription").value = data.cakedescription
             
             popup.classList.add("active");  
